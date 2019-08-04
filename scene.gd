@@ -37,7 +37,7 @@ func create_cake(position: Vector2, numSlices: int):
 	
 	for i in numSlices:
 		var sliceAngle = 360.0 / numSlices
-		var b = Ball.new(position, 30, i*sliceAngle, (i+1)*sliceAngle)
+		var b = Ball.new(position, 150, i*sliceAngle, (i+1)*sliceAngle)
 		add_child(b)
 		
 func give_score(score):

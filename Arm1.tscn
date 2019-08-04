@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="StreamTexture" id=1]
+flags = 4
+load_path = "res://.import/arm_1.png-71d28402d366d88caa0ad1a7f68ed57f.stex"
+
+[node name="Arm1" type="Node2D"]
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 206.672, 1.29234 )
+rotation = 1.5708
+scale = Vector2( 0.168811, 0.193817 )
+texture = SubResource( 1 )

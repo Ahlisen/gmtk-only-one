@@ -19,11 +19,16 @@ var keyDown: int
 var angle1: float = 0
 var angle2: float = 0
 
-var length1 = 300
-var length2 = 250
+var length1 = 350
+var length2 = 400
 
 var score = 0
 var totalFika
+
+var body = preload("res://Body.tscn").instance()
+var arm0 = preload("res://Arm0.tscn").instance()
+var arm1 = preload("res://Arm1.tscn").instance()
+var hand = preload("res://Hand.tscn").instance()
 
 func _init(keyUp: int, keyDown: int, totalFika: int):
 	self.keyUp = keyUp
@@ -37,6 +42,11 @@ func _ready():
 	oldHandPosition = shoulderPosition
 	oldShoulderPosition = shoulderPosition
 	velocity = 0
+	
+	add_child(arm1)
+	add_child(body)
+	add_child(arm0)
+	add_child(hand)
 
 func _process(delta):
 	
@@ -70,12 +80,25 @@ func _process(delta):
 		update()
 
 func _draw():
-	var arm1 = Vector2(shoulderPosition.x + cos(angle1) * length1, shoulderPosition.y + sin(angle1) * length1)
-	var arm2 = Vector2(arm1.x + cos(angle2 + angle1) * length2, arm1.y + sin(angle2 + angle1) * length2)
-	draw_line(shoulderPosition, arm1, Color(1,0.5,0.6), 15)
-	draw_line(arm1, arm2, Color(1,0.85,0.6), 10)
+	var arm1Pos = Vector2(shoulderPosition.x + cos(angle1) * length1, shoulderPosition.y + sin(angle1) * length1)
+	var arm2Pos = Vector2(arm1Pos.x + cos(angle2 + angle1) * length2, arm1Pos.y + sin(angle2 + angle1) * length2)
+	
+	body.position = shoulderPosition
+	body.rotation = shoulderPosition.angle_to_point(bodyPosition)
+	
+	arm0.position = shoulderPosition
+	arm0.rotation = angle1
+	
+	arm1.position = arm1Pos
+	arm1.rotation = angle2 + angle1
+	
+	hand.position = arm2Pos
+	hand.rotation = angle2 + angle1
+	
+#	draw_line(shoulderPosition, arm1Pos, Color(1,0.5,0.6), 15)
+#	draw_line(arm1Pos, arm2Pos, Color(1,0.85,0.6), 10)
 	draw_line(bodyPosition, shoulderPosition, Color(0.25,0.75,1), 40)
-	draw_circle(arm2, 20, Color(1,0.75,0.6))
+#	draw_circle(arm2Pos, 20, Color(1,0.75,0.6))
 	
 func clear_target():
 	target = null

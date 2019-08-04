@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="StreamTexture" id=1]
+flags = 4
+load_path = "res://.import/body.png-8a768ffbced62509d3858d9fd887a47c.stex"
+
+[node name="Body" type="Node2D"]
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( -626.157, 209.203 )
+rotation = 1.5708
+scale = Vector2( 0.405884, 0.405884 )
+texture = SubResource( 1 )
