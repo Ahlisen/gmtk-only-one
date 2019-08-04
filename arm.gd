@@ -25,19 +25,21 @@ var length2 = 400
 var score = 0
 var totalFika
 
+var hunting = true
+
 var body = preload("res://Body.tscn").instance()
 var arm0 = preload("res://Arm0.tscn").instance()
 var arm1 = preload("res://Arm1.tscn").instance()
 var hand = preload("res://Hand.tscn").instance()
 
-func _init(keyUp: int, keyDown: int, totalFika: int):
+func _init(keyUp: int, keyDown: int, totalFika: int, pos: Vector2):
 	self.keyUp = keyUp
 	self.keyDown = keyDown
 	self.totalFika = totalFika
+	bodyPosition = pos
 
 func _ready():
-	var size = get_viewport_rect().size
-	bodyPosition = Vector2(0, randf()*size.y)
+	
 	shoulderPosition = bodyPosition
 	oldHandPosition = shoulderPosition
 	oldShoulderPosition = shoulderPosition
@@ -72,7 +74,7 @@ func _process(delta):
 			target = null
 	
 		var dist = bodyPosition.distance_to(targetPosition)
-		var stretchShoulderRatio = max(dist - (length1+length2), 0) / dist 
+		var stretchShoulderRatio = max(dist - (length1+length2), 0) / dist
 		var stretchShoulderPosition = bodyPosition.linear_interpolate(targetPosition, stretchShoulderRatio)
 		shoulderPosition = oldShoulderPosition.linear_interpolate(stretchShoulderPosition, progress)
 		handPosition = oldHandPosition.linear_interpolate(targetPosition, progress)
@@ -84,7 +86,7 @@ func _draw():
 	var arm2Pos = Vector2(arm1Pos.x + cos(angle2 + angle1) * length2, arm1Pos.y + sin(angle2 + angle1) * length2)
 	
 	body.position = shoulderPosition
-	body.rotation = shoulderPosition.angle_to_point(bodyPosition)
+	body.rotation = handPosition.angle_to_point(bodyPosition)
 	
 	arm0.position = shoulderPosition
 	arm0.rotation = angle1
@@ -97,7 +99,7 @@ func _draw():
 	
 #	draw_line(shoulderPosition, arm1Pos, Color(1,0.5,0.6), 15)
 #	draw_line(arm1Pos, arm2Pos, Color(1,0.85,0.6), 10)
-	draw_line(bodyPosition, shoulderPosition, Color(0.25,0.75,1), 40)
+#	draw_line(bodyPosition, shoulderPosition, Color(0.25,0.75,1), 40)
 #	draw_circle(arm2Pos, 20, Color(1,0.75,0.6))
 	
 func clear_target():
@@ -119,7 +121,6 @@ func reset_target():
 		target = weakref(targets[index])
 		oldHandPosition = handPosition
 		oldShoulderPosition = shoulderPosition
-		shoulderPosition = bodyPosition
 		progress = 0
 		
 func ik():

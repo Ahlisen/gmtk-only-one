@@ -27,8 +27,11 @@ func start_game():
 		create_cake(pos, slices)
 		fikaCount += slices
 	
-	for i in keyPairs:
-		var arm = Arm.new(i[0], i[1], fikaCount)
+	for i in keyPairs.size():
+		var b = keyPairs[i]
+		var x = float(i) / keyPairs.size() * size.x
+		var pos = Vector2(x, size.y)
+		var arm = Arm.new(b[0], b[1], fikaCount, pos)
 		arm.connect("hit", self, "give_score")
 		add_child(arm)
 		players.append(arm)
