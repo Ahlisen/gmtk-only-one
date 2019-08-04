@@ -6,21 +6,33 @@ var pos = Vector2(0,0)
 var radius: float
 var angle_from: float
 var angle_to: float
+var color
 
-func _init(pos: Vector2, radius: float, angle_from: float = 0.0, angle_to: float = 360.0):
+func _init(pos: Vector2, radius: float, color: Color, angle_from: float = 0.0, angle_to: float = 360.0):
 	self.pos = pos
 	self.radius = radius
 	self.angle_from = angle_from
 	self.angle_to = angle_to
+	self.color = color
 
 func _ready():
 	add_to_group("balls")
 
 func _draw():
-	draw_circle_arc_poly(pos, radius, angle_from, angle_to, Color(0.5,0.9,0.6))
+	draw_circle_arc_poly(pos, radius, angle_from, angle_to, color)
 	
 func delete():
 	queue_free()
+	
+#func draw_side(p1,p2,p3,height, color):
+#	var points = PoolVector2Array()
+#	var colors = PoolColorArray([color])
+#	points.push_back(p1)
+#	points.push_back(p2)
+#	points.push_back(p3)
+#	points.push_back(p1+Vector2(0, height))
+#	points.push_back(p2+Vector2(0, height))
+#	draw_polygon(points, colors)
 	
 func draw_circle_arc_poly(center, radius, angle_from, angle_to, color):
     var nb_points = 32

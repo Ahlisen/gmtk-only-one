@@ -1,13 +1,6 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://HUD.gd" type="Script" id=1]
-
-[sub_resource type="DynamicFontData" id=3]
-font_path = "res://GochiHand-Regular.ttf"
-
-[sub_resource type="DynamicFont" id=4]
-size = 64
-font_data = SubResource( 3 )
 
 [sub_resource type="DynamicFontData" id=1]
 font_path = "res://GochiHand-Regular.ttf"
@@ -16,33 +9,52 @@ font_path = "res://GochiHand-Regular.ttf"
 size = 64
 font_data = SubResource( 1 )
 
+[sub_resource type="DynamicFontData" id=3]
+font_path = "res://GochiHand-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=4]
+size = 64
+font_data = SubResource( 3 )
+
+[sub_resource type="DynamicFontData" id=5]
+font_path = "res://GochiHand-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=6]
+size = 64
+font_data = SubResource( 5 )
+
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource( 1 )
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -464.255
-margin_top = 38.6632
-margin_right = -47.2551
-margin_bottom = 440.663
+margin_left = -503.107
+margin_top = 79.6741
+margin_right = -86.1074
+margin_bottom = 481.674
 color = Color( 1, 1, 1, 0.027451 )
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="MessageLabel" type="Label" parent="ColorRect"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -420.075
+margin_left = -415.758
 margin_top = 164.024
-margin_right = -2.07544
+margin_right = 2.24146
 margin_bottom = 406.024
-custom_fonts/font = SubResource( 4 )
-text = "0
-0
-0"
+custom_fonts/font = SubResource( 2 )
 align = 1
+
+[node name="PlayerSlider" type="HSlider" parent="ColorRect"]
+margin_left = -1360.69
+margin_top = 451.615
+margin_right = -943.689
+margin_bottom = 503.615
+min_value = 1.0
+max_value = 3.0
+value = 1.0
+tick_count = 1
+ticks_on_borders = true
 
 [node name="TitleLabel" type="Label" parent="ColorRect"]
 anchor_left = 0.5
@@ -50,7 +62,49 @@ anchor_right = 0.5
 margin_left = -251.5
 margin_right = 208.5
 margin_bottom = 237.0
-custom_fonts/font = SubResource( 2 )
+rect_pivot_offset = Vector2( -2013.89, 80.3259 )
+custom_fonts/font = SubResource( 4 )
 text = "Swedish
- Fika Manners"
+Fika Manners"
 align = 1
+
+[node name="TitleLabel2" type="Label" parent="ColorRect"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -1095.47
+margin_top = 479.995
+margin_right = -238.468
+margin_bottom = 571.995
+rect_pivot_offset = Vector2( -2013.89, 80.3259 )
+custom_fonts/font = SubResource( 4 )
+text = "(Pst) No one takes the last piece"
+align = 1
+
+[node name="HelpLabel" type="Label" parent="ColorRect"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -1594.07
+margin_top = -43.1694
+margin_right = -1134.07
+margin_bottom = 273.831
+rect_pivot_offset = Vector2( -2013.89, 80.3259 )
+custom_fonts/font = SubResource( 4 )
+text = "Controls:
+W/S
+K/L
+Num1/Num2
+
+Human Players:"
+align = 1
+
+[node name="StartButton" type="Button" parent="ColorRect"]
+margin_left = -1365.47
+margin_top = 565.497
+margin_right = -947.47
+margin_bottom = 667.497
+custom_fonts/font = SubResource( 6 )
+text = "Start"
+[connection signal="value_changed" from="ColorRect/PlayerSlider" to="." method="_on_PlayerSlider_value_changed"]
+[connection signal="pressed" from="ColorRect/StartButton" to="." method="_on_StartButton_pressed"]

@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/snatch13.ogg-c754ec4b546b196ec014e5a2e11db2a4.oggstr"
+
+[deps]
+
+source_file="res://audio/snatch13.ogg"
+dest_files=[ "res://.import/snatch13.ogg-c754ec4b546b196ec014e5a2e11db2a4.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

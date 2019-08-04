@@ -1,6 +1,7 @@
 extends Node2D
 
 signal hit
+signal over
 
 class_name Arm, "res://arm.gd"
 
@@ -23,7 +24,8 @@ var length1 = 350
 var length2 = 400
 
 var score = 0
-var totalFika
+var totalFika = 0
+var isAI = false
 
 var hunting = true
 
@@ -32,18 +34,26 @@ var arm0 = preload("res://Arm0.tscn").instance()
 var arm1 = preload("res://Arm1.tscn").instance()
 var hand = preload("res://Hand.tscn").instance()
 
+#
+#var ye = AudioStreamPlayer.new()
+
+
 func _init(keyUp: int, keyDown: int, totalFika: int, pos: Vector2):
 	self.keyUp = keyUp
 	self.keyDown = keyDown
 	self.totalFika = totalFika
 	bodyPosition = pos
+	handPosition = pos + Vector2(-1,-10)
 
 func _ready():
+	
+#	add_child(ye)
 	
 	shoulderPosition = bodyPosition
 	oldHandPosition = shoulderPosition
 	oldShoulderPosition = shoulderPosition
 	velocity = 0
+	add_to_group("players")
 	
 	add_child(arm1)
 	add_child(body)
@@ -51,27 +61,33 @@ func _ready():
 	add_child(hand)
 
 func _process(delta):
-	
-	velocity += (float(Input.is_key_pressed(keyUp)) - float(Input.is_key_pressed(keyDown))*2) * delta
+	if isAI:
+		velocity += delta*0.1
+	else:
+		velocity += (float(Input.is_key_pressed(keyUp)) - float(Input.is_key_pressed(keyDown))*2) * delta
 	velocity = clamp(velocity, 0, 5)
         
 	if target == null:
 		reset_target()
 	else:
 		var ref = target.get_ref()
-		
-		if ref:
-			targetPosition = ref.pos
-		else:
-			reset_target()
+		if hunting:
+			if ref:
+				targetPosition = ref.pos
+			else:
+				reset_target()
 			
 		if progress < 1:
 			progress += velocity * delta
 		else:
-			if ref:
-				ref.delete()
-				reached_target()
-			target = null
+			if hunting:
+				if ref:
+					ref.delete()
+					reached_target()
+				target = null
+			else:
+				hunting = true
+				reset_target()
 	
 		var dist = bodyPosition.distance_to(targetPosition)
 		var stretchShoulderRatio = max(dist - (length1+length2), 0) / dist
@@ -112,7 +128,16 @@ func reached_target():
 		score += totalFika - candyLeft
 	else:
 		score = 0
+		emit_signal("over")
 	emit_signal("hit", score)
+	hunting = false
+	targetPosition = bodyPosition + Vector2(0, -50)
+	progress = 0
+	oldHandPosition = handPosition
+	oldShoulderPosition = shoulderPosition
+#	var r = randi()%4
+#	ye.stream =  load("res://audio/snatch"+String(r)+".ogg")
+#	ye.play()
 
 func reset_target():
 	var targets = get_tree().get_nodes_in_group("balls")
