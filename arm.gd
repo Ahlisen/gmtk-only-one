@@ -1,5 +1,7 @@
 extends Node2D
 
+signal hit
+
 class_name Arm, "res://arm.gd"
 
 var handPosition: Vector2 = Vector2(0,0)
@@ -20,9 +22,13 @@ var angle2: float = 0
 var length1 = 300
 var length2 = 250
 
-func _init(keyUp: int, keyDown: int):
+var score = 0
+var totalFika
+
+func _init(keyUp: int, keyDown: int, totalFika: int):
 	self.keyUp = keyUp
 	self.keyDown = keyDown
+	self.totalFika = totalFika
 
 func _ready():
 	var size = get_viewport_rect().size
@@ -34,7 +40,7 @@ func _ready():
 
 func _process(delta):
 	
-	velocity += (float(Input.is_key_pressed(keyUp)) - float(Input.is_key_pressed(keyDown))) * 0.01
+	velocity += (float(Input.is_key_pressed(keyUp)) - float(Input.is_key_pressed(keyDown))*2) * delta
 	velocity = clamp(velocity, 0, 5)
         
 	if target == null:
@@ -52,11 +58,11 @@ func _process(delta):
 		else:
 			if ref:
 				ref.delete()
+				reached_target()
 			target = null
 	
 		var dist = bodyPosition.distance_to(targetPosition)
-		var comp = max(dist - (length1+length2), 0)
-		var stretchShoulderRatio = comp / dist
+		var stretchShoulderRatio = max(dist - (length1+length2), 0) / dist 
 		var stretchShoulderPosition = bodyPosition.linear_interpolate(targetPosition, stretchShoulderRatio)
 		shoulderPosition = oldShoulderPosition.linear_interpolate(stretchShoulderPosition, progress)
 		handPosition = oldHandPosition.linear_interpolate(targetPosition, progress)
@@ -74,6 +80,15 @@ func _draw():
 func clear_target():
 	target = null
 	
+func reached_target():
+	var candyLeft = get_tree().get_nodes_in_group("balls").size()
+	print(candyLeft)
+	if candyLeft > 1:
+		score += totalFika - candyLeft
+	else:
+		score = 0
+	emit_signal("hit", score)
+
 func reset_target():
 	var targets = get_tree().get_nodes_in_group("balls")
 	if targets.size() != 0:
